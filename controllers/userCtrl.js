@@ -26,7 +26,7 @@ async function registration(){
         showMessage('danger', 'ERROR', res.error);
     } else {
         showMessage('success', 'SUCCESS', res.message);
-        navigate('views/users/login');
+        navigate('views/user/login');
     }
 
 
@@ -70,15 +70,15 @@ function logout(){
 }
 
 function storeUser(user){
-    sessionStorage.setItem('StepCounterUser', JSON.stringify(user));
+    sessionStorage.setItem('WeatherAppUser', JSON.stringify(user));
 }
 function loadUser(){
-    let user = JSON.parse(sessionStorage.getItem('StepCounterUser'));
+    let user = JSON.parse(sessionStorage.getItem('WeatherAppUser'));
     return user;
 }
 
 function clearUser(){
-    sessionStorage.removeItem('StepCounterUser');
+    sessionStorage.removeItem('WeatherAppUser');
 }
 
 function loginCheck(){
@@ -87,14 +87,14 @@ function loginCheck(){
     if (user) {
         if (user.role == 'admin') {
             setMenuItems('admin');
-            navigate('views/admin/dashboard');
+            navigate('views/admin/weather');
         } else {
             setMenuItems('user');
-            navigate('views/users/steps');
+            navigate('views/user/forecast');
         }
     } else {
         setMenuItems('');
-        navigate('views/users/login');
+        navigate('views/user/login');
     }
 }
 
@@ -136,7 +136,7 @@ async function updateProfile(){
         loggedUserID: uid
     }
 
-    const response = await fetch(`http://localhost:3000/users/${uid}`, {
+    const response = await fetch(`http://localhost:3000/user/${uid}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -172,7 +172,7 @@ async function updatePasswd(){
 
     let uid = loadUser() ? loadUser().ID : 0;
 
-    const response = await fetch(`http://localhost:3000/users/${uid}/passmod`, {
+    const response = await fetch(`http://localhost:3000/user/${uid}/passmod`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

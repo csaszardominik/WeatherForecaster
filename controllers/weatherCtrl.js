@@ -1,163 +1,321 @@
+// async function loadForecast() {
+
+//     let box = document.querySelector('#forecastList');
+
+//     if (!box) {
+//         return;
+//     }
+
+//     const response = await fetch('http://localhost:3000/weather');
+
+//     let res = await response.json();
+
+//     if (response.status !== 200) {
+//         showMessage('danger', 'ERROR', res.error);
+//         return;
+//     }
+
+//     if (res.length === 0) {
+//         box.innerHTML = '<p class="text-secondary">Még nincs rögzített előrejelzés.</p>';
+//         return;
+//     }
+
+//     box.innerHTML = '';
+
+//     res.forEach(weather => {
+
+
+//         box.innerHTML += `
+//             <div class="col-md-6 col-xl-4">
+//                 <div class="weather-card">
+
+//                     <div class="d-flex justify-content-between">
+//                         <span class="text-secondary">
+//                             ${new Date(weather.date).toLocaleDateString('hu-HU')}
+
+//                     </div>
+
+//                     <h3>${weather.location}</h3>
+
+//                     <div class="temperature">
+//                         ${weather.temp_min}° / ${weather.temp_max}°
+//                     </div>
+
+//                     <p class="mb-3">
+//                         ${weather.weather_type}
+//                     </p>
+
+//                     <button
+//                         class="btn btn-outline-primary btn-sm"
+//                         onclick="showWeatherDetail(${weather.ID})">
+//                         Részletek
+//                     </button>
+
+//                 </div>
+//             </div>
+//         `;
+//     });
+// }
+
+
+// async function showWeatherDetail(id) {
+
+//     let user = loadUser();
+
+//     if (!user) {
+//         showMessage(
+//             'warning',
+//             'FIGYELEM',
+//             'A részletes adatok megtekintéséhez jelentkezz be.'
+//         );
+//         return;
+//     }
+
+//     const response = await fetch(
+//         `http://localhost:3000/weather/${id}`,
+//         {
+//             headers: {
+//                 'x-user-id': user.ID
+//             }
+//         }
+//     );
+
+//     let res = await response.json();
+
+//     if (response.status !== 200) {
+//         showMessage('danger', 'ERROR', res.error);
+//         return;
+//     }
+
+//     let detailBox = document.querySelector('#weatherDetail');
+
+//     detailBox.innerHTML = `
+//         <div class="panel mt-4">
+
+//             <div class="d-flex justify-content-between">
+//                 <h3>${res.location} – részletes adatok</h3>
+
+//                 <button
+//                     class="btn-close"
+//                     onclick="document.querySelector('#weatherDetail').innerHTML = ''">
+//                 </button>
+//             </div>
+
+//             <div class="detail-grid mt-3">
+
+//                 ${'Dátum', new Date(res.date).toLocaleDateString('hu-HU')}
+//                 ${'Minimum', res.temp_min + ' °C'}
+//                 ${'Maximum', res.temp_max + ' °C'}
+//                 ${'Időjárás', res.weather_type}
+//                 ${'Csapadék', res.precipitation + ' mm'}
+//                 ${'Csapadék esélye', res.precipitation_probability + '%'}
+//                 ${'Szélsebesség', res.wind_speed + ' km/h'}
+//                 ${'Szélirány', res.wind_direction}
+//                 ${'Páratartalom', res.humidity + '%'}
+//                 ${'Légnyomás', res.pressure + ' hPa'}
+//                 ${'UV-index', res.uv_index}
+
+//             </div>
+//         </div>
+//     `;
+// }
+// async function loadWeather() {
+//     try {
+//         const response = await fetch('/weather');
+//         const weatherData = await response.json();
+
+//         console.log(weatherData);
+//         return weatherData;
+//     } catch (error) {
+//         console.error('Hiba az időjárási adatok lekérésekor:', error);
+//     }
+// }
+
+
+// async function getWeather() {
+//     const list = document.querySelector('#forecastList');
+//     if (!list) return;
+//     try {
+//         const response = await fetch('http://localhost:3000/weather');
+//         const forecasts = await response.json();
+//         if (!response.ok) {
+//              list.innerHTML = `<p class="text-danger">${forecasts.error}</p>`;
+//             return; 
+//             }
+//         list.innerHTML = '';
+
+//         if (!forecasts.length) {
+//              list.innerHTML = '<p>Még nincs előrejelzés.</p>'; 
+//              return;
+//             }
+//         forecasts.forEach(item => {
+//             const col = document.createElement('div'); col.className = 'col-md-6 col-xl-4';
+//             const card = document.createElement('div'); card.className = 'card h-100 shadow-sm';
+//             const body = document.createElement('div'); body.className = 'card-body';
+
+//             const date = new Date(item.date).toLocaleDateString('hu-HU');
+
+//             body.innerHTML = `<h5 class="card-title"></h5><p class="card-text"></p><p class="card-text"></p><button class="btn btn-outline-primary btn-sm">Részletek</button>`;
+//             body.querySelector('.card-title').textContent = `${item.location} – ${date}`;
+//             body.querySelectorAll('.card-text')[0].textContent = `${item.temp_min} °C – ${item.temp_max} °C`;
+//             body.querySelectorAll('.card-text')[1].textContent = item.weather_type;
+//             body.querySelector('button').addEventListener('click', () => {
+//                  if (!loadUser()) {
+//                     showMessage('warning','Bejelentkezés szükséges','A részletes adatok megtekintéséhez jelentkezz be.');
+//                     return; }
+//                     showWeatherDetail(item.ID); 
+//                 });
+//             card.appendChild(body); col.appendChild(card); list.appendChild(col);
+//         });
+//     } catch (_error) { list.innerHTML = '<p class="text-danger">Nem sikerült betölteni az előrejelzéseket. Fut a backend?</p>'; }
+// }
 
 async function getWeather() {
-    let uid = loadUser() ? loadUser().ID : 0;
-
-    const response = await fetch(`http://localhost:3000/steps/${uid}`);
-
-    if (response.status !== 200) {
-        const res = await response.json();
-        showMessage('danger', 'ERROR', res.error);
-        return;
-    }
-
-    const steps = await response.json();
-    drawStepsTable(steps);
-    initChart(steps);
+    const list = document.querySelector('#forecastList');
+    if (!list) return;
+    try {
+        const response = await fetch('http://localhost:3000/weather');
+        const forecasts = await response.json();
+        if (!response.ok) { list.innerHTML = `<p class="text-danger">${forecasts.error}</p>`; return; }
+        list.innerHTML = '';
+        if (!forecasts.length) { list.innerHTML = '<p>Még nincs előrejelzés.</p>'; return; }
+        forecasts.forEach(item => {
+            const col = document.createElement('div'); col.className = 'col-md-6 col-xl-4';
+            const card = document.createElement('div'); card.className = 'card h-100 shadow-sm';
+            const body = document.createElement('div'); body.className = 'card-body';
+            const date = new Date(item.date).toLocaleDateString('hu-HU');
+            body.innerHTML = `<h5 class="card-title"></h5><p class="card-text"></p><p class="card-text"></p><button class="btn btn-outline-primary btn-sm">Részletek</button>`;
+            body.querySelector('.card-title').textContent = `${item.location} – ${date}`;
+            body.querySelectorAll('.card-text')[0].textContent = `${item.temp_min} °C – ${item.temp_max} °C`;
+            body.querySelectorAll('.card-text')[1].textContent = item.weather_type;
+            body.querySelector('button').addEventListener('click', () => { if (!loadUser()) { showMessage('warning','Bejelentkezés szükséges','A részletes adatok megtekintéséhez jelentkezz be.'); return; } showWeatherDetail(item.ID); });
+            card.appendChild(body); col.appendChild(card); list.appendChild(col);
+        });
+    } catch (_error) { list.innerHTML = '<p class="text-danger">Nem sikerült betölteni az előrejelzéseket. Fut a backend?</p>'; }
+}
+async function showWeatherDetail(id) {
+    const target = document.querySelector('#weatherDetail');
+    const user = loadUser();
+    if (!user) return showMessage('warning','Bejelentkezés szükséges','A részletes adatok megtekintéséhez jelentkezz be.');
+    const response = await fetch(`http://localhost:3000/weather/${id}?uid=${user.ID}`);
+    const item = await response.json();
+    if (!response.ok) return showMessage('danger','Hiba',item.error);
+    target.innerHTML = '';
+    const panel = document.createElement('div'); panel.className = 'card mt-4';
+    const body = document.createElement('div'); body.className = 'card-body';
+    const title = document.createElement('h4'); title.textContent = `${item.location} – részletes adatok`;
+    const details = document.createElement('p');
+    details.textContent = `Csapadék: ${item.precipitation} mm; csapadék esélye: ${item.precipitation_probability}%; szél: ${item.wind_speed} km/h (${item.wind_direction}); páratartalom: ${item.humidity}%; légnyomás: ${item.pressure} hPa; UV-index: ${item.uv_index}`;
+    body.append(title,details); panel.appendChild(body); target.appendChild(panel);
 }
 
-function drawStepsTable(steps) {
-    const stepsList = document.querySelector('#stepsList');
 
-    if (!stepsList) {
-        console.error('Cannot find #stepsList');
-        return;
-    }
+// async function getWeather() {
+//     const list = document.querySelector('#forecastList');
+//     if (!list) return;
 
-    stepsList.innerHTML = '';
+//     const r = await apiFetch('/weather');
+//     if (!r.ok) {
+//         list.innerHTML = '';
+//         const p = document.createElement('p');
+//         p.className = 'text-danger';
+//         p.textContent = r.data.error;
+//         list.appendChild(p);
+//         return;
+//     }
 
-    let totalSteps = 0;
+//     list.innerHTML = '';
+//     if (!r.data.length) {
+//         list.innerHTML = '<p>Még nincs előrejelzés.</p>';
+//         return;
+//     }
 
-    if (steps.length === 0) {
-        stepsList.innerHTML = `
-            <tr>
-                <td colspan="4" class="text-center">
-                    No steps recorded yet.
-                </td>
-            </tr>`;
-        return;
-    }
+//     r.data.forEach(item => {
+//         const col = document.createElement('div');
+//         col.className = 'col-md-6 col-xl-4';
+//         col.innerHTML = `<div class="card h-100 shadow-sm"><div class="card-body">
+//             <h5 class="card-title"></h5>
+//             <p class="card-text temp mb-0"></p>
+//             <p class="card-text type"></p>
+//             <button class="btn btn-outline-primary btn-sm">Részletek</button>
+//         </div></div>`;
+//         col.querySelector('.card-title').textContent = `${item.location} – ${formatDate(item.date)}`;
+//         col.querySelector('.temp').textContent = `${item.temp_min} °C – ${item.temp_max} °C`;
+//         col.querySelector('.type').textContent = item.weather_type;
+//         col.querySelector('button').addEventListener('click', () => showWeatherDetail(item.ID));
+//         list.appendChild(col);
+//     });
+// }
 
-    steps.forEach((step, index) => {
-        totalSteps += Number(step.step_count);
+// // Részletek: csak bejelentkezett (és nem kitiltott) felhasználónak
+// async function showWeatherDetail(id) {
+//     const user = loadUser();
+//     if (!user) {
+//         showMessage('warning', 'Bejelentkezés szükséges', 'A részletes adatok megtekintéséhez jelentkezz be.');
+//         return;
+//     }
 
-        const tr = document.createElement('tr');
+//     const r = await apiFetch(`/weather/${id}?uid=${user.ID}`);
+//     if (!r.ok) {
+//         showMessage('danger', 'ERROR', r.data.error);
+//         return;
+//     }
 
-        const td1 = document.createElement('td');
-        const td2 = document.createElement('td');
-        const td3 = document.createElement('td');
-        const td4 = document.createElement('td');
+//     const item = r.data;
+//     const rows = [
+//         ['Dátum', formatDate(item.date)],
+//         ['Minimum', item.temp_min + ' °C'],
+//         ['Maximum', item.temp_max + ' °C'],
+//         ['Időjárás', item.weather_type],
+//         ['Csapadék', item.precipitation + ' mm'],
+//         ['Csapadék esélye', item.precipitation_probability + ' %'],
+//         ['Szélsebesség', item.wind_speed + ' km/h'],
+//         ['Szélirány', item.wind_direction],
+//         ['Páratartalom', item.humidity + ' %'],
+//         ['Légnyomás', item.pressure + ' hPa'],
+//         ['UV-index', item.uv_index]
+//     ];
 
-        td1.textContent = (index + 1) + '.';
+//     const target = document.querySelector('#weatherDetail');
+//     target.innerHTML = `<div class="panel mt-4">
+//         <div class="d-flex justify-content-between align-items-start">
+//             <h3 class="detail-title"></h3>
+//             <button type="button" class="btn-close" aria-label="Close"></button>
+//         </div>
+//         <div class="detail-grid mt-3"></div>
+//     </div>`;
+//     target.querySelector('.detail-title').textContent = `${item.location} – részletes adatok`;
+//     target.querySelector('.btn-close').addEventListener('click', () => { target.innerHTML = ''; });
 
-      
-        const date = new Date(step.date);
-        td2.textContent = date.toLocaleDateString('hu-HU');
+//     const grid = target.querySelector('.detail-grid');
+//     rows.forEach(([label, value]) => {
+//         const cell = document.createElement('div');
+//         cell.className = 'detail-item';
+//         const small = document.createElement('small');
+//         small.className = 'text-secondary';
+//         small.textContent = label;
+//         const strong = document.createElement('div');
+//         strong.className = 'detail-value';
+//         strong.textContent = value;
+//         cell.append(small, strong);
+//         grid.appendChild(cell);
+//     });
+//     target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+// }
 
-        td3.className = 'text-end';
-        td3.textContent = Number(step.step_count).toLocaleString('hu-HU');
-
-       td4.className = 'text-end';
-
-td4.innerHTML = `
-    <button 
-        type="button" 
-        class="btn btn-danger"
-        onclick="deleteStep(${step.id})">
-        <i class="bi bi-trash"></i>
-    </button>
-`;
-
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        tr.appendChild(td4);
-
-        stepsList.appendChild(tr);
-    });
-
-    //osszegzes
-    const summary = document.createElement('tr');
-    summary.className = 'summary-row';
-
-    summary.innerHTML = `
-        <td></td>
-        <td class="fw-bold">Summary</td>
-        <td class="text-end fw-bold">
-            ${(totalSteps * 0.7 / 1000)} Km
-        </td>
-        <td></td>
-        `;
-
-stepsList.appendChild(summary);
-}
-async function deleteStep(stepID) {
-
-    let luid = loadUser() ? loadUser().ID : 0;
-
-    if (!luid) {
-        showMessage('danger', 'ERROR', 'You must be logged in!');
-        return;
-    }
-
-    const response = await fetch(
-        `http://localhost:3000/steps/${stepID}`,
-        {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                luid: luid
-            })
-        }
-    );
-
-    const res = await response.json();
-
-    if (response.status !== 200) {
-        showMessage('danger', 'ERROR', res.error);
-        return;
-    }
-
-    showMessage('success', 'SUCCESS', res.message);
-    getUserSteps();     
-}
-
-function initChart(steps) {
-
-    let labels = [];
-    let datas = [];
-    
-  const ctx = document.getElementById('myChart');
-
-  steps.sort((a, b) => new Date(a.date) - new Date(b.date));
-
- steps.forEach((step) => {
-    labels.push(moment(step.date).format('YYYY-MM-DD'));
-    datas.push(step.step_count);
-  });
-
-
-
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: '# of Steps',
-        data: datas,
-        borderWidth: 2,
-        pointStyle: 'circle',
-      pointRadius: 10,
-      pointHoverRadius: 15
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-}
+// async function showWeatherDetail(id) {
+//     const target = document.querySelector('#weatherDetail');
+//     const user = loadUser();
+//     if (!user) 
+//         return showMessage('warning','Bejelentkezés szükséges','A részletes adatok megtekintéséhez jelentkezz be.');
+//     const response = await fetch(`http://localhost:3000/weather/${id}?uid=${user.ID}`);
+//     const item = await response.json();
+//     if (!response.ok) return showMessage('danger','Hiba',item.error);
+//     target.innerHTML = '';
+//     const panel = document.createElement('div'); panel.className = 'card mt-4';
+//     const body = document.createElement('div'); body.className = 'card-body';
+//     const title = document.createElement('h4'); title.textContent = `${item.location} – részletes adatok`;
+//     const details = document.createElement('p');
+//     details.textContent = `Csapadék: ${item.precipitation} mm; csapadék esélye: ${item.precipitation_probability}%; szél: ${item.wind_speed} km/h (${item.wind_direction}); páratartalom: ${item.humidity}%; légnyomás: ${item.pressure} hPa; UV-index: ${item.uv_index}`;
+//     body.append(title,details); panel.appendChild(body); target.appendChild(panel);
+// }

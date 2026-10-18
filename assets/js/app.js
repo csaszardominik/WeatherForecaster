@@ -1,5 +1,4 @@
 let contentBox = document.querySelector('#content');
-
 let lightModeBtn = document.querySelector('#lightModeBtn');
 let darkModeBtn = document.querySelector('#darkModeBtn');
 
@@ -14,15 +13,14 @@ async function navigate(page) {
         case 'views/admin/users':
             getAllUsers();
             break;
-
         case 'views/admin/weather':
             getStatistics();
             break;
         case 'views/user/forecast':
-            getUserSteps();
+            
             break;
         case 'views/user/profileUpdate':
-            getUserSteps();
+            
             break;
     }
 }
@@ -68,8 +66,8 @@ function clearUser() {
      sessionStorage.removeItem('WeatherAppUser') 
     }
 
-navigate('views/users/home');
+navigate('views/user/home');
 
 loadTheme();
 
-setMenuItems();
+loginCheck();

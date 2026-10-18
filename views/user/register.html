@@ -1,22 +1,27 @@
-<div class="row justify-content-center">
-    <div class="col-md-7 col-lg-5">
-        <div class="form-panel">
-            <div class="text-center mb-4">
-                <div><i class="bi bi-cloud-fill"></i></div>
-                <h2>Regisztráció</h2>
-                <p class="text-secondary">Hozd létre a saját fiókodat.</p>
-            </div>
-            <form onclick="registration()">
-                <div class="mb-3"><label class="form-label">Név</label><input class="form-control" id="name" required>
-                </div>
-                <div class="mb-3"><label class="form-label">E-mail-cím</label><input class="form-control" id="email"
-                        type="email" required></div>
-                <div class="mb-3"><label class="form-label">Jelszó (min. 6 karakter)</label><input class="form-control"
-                        id="passwd" type="password" minlength="6" required></div>
-                <div class="mb-3"><label class="form-label">Jelszó megerősítése</label><input class="form-control"
-                        id="confirm" type="password" minlength="6" required></div><button
-                    class="btn btn-primary w-100">Regisztráció</button>
-            </form>
-        </div>
+<div class="col-lg-6 offset mb-3">
+<h3>Registration</h3>
+<hr>
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="name" placeholder="">
+        <label for="name">Username</label>
     </div>
+    
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+        <label for="email">E-mail address</label>
+    </div>
+    
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="passwd" placeholder="Password">
+        <label for="passwd">Password</label>
+    </div>
+    
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="confirm" placeholder="Password">
+        <label for="confirm">Confirm password</label>
+    </div>
+    
+    <button type="button" class="btn btn-primary" onclick="registration()"><i class="bi bi-person-fill-gear"></i> &nbsp;Registration</button>
+
+        <p>Already registered? <strong><a href="#" onclick="navigate('views/user/login')">Sign in!</a></strong></p>
 </div>

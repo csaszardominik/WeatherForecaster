@@ -1,9 +1,10 @@
-body {
+/* body {
     background: linear-gradient(145deg, #d9f1fa, #f6f9fc 55%, #e4eef7);
     color: var(--ink);
     min-height: 100vh;
     color: black;
 }
+
 
 header{
     text-align: center;
@@ -20,20 +21,160 @@ footer{
 }
 
 main{
-    /* padding: 20px; */
-    min-height: 420px
+    padding: 20px;
 }
 
-.navbar {
-    background: #12304a;
-    box-shadow: 0 6px 16px #12304a18
+strong{
+    font-size: 150%;
 }
 
-.navbar .nav-link {
-    color: #d8eaf5
+h1{
+    color: var(--bs-primary);
 }
 
-.navbar .nav-link:hover {
-    color: white
+h2{
+    color: var(--bs-secondary);
 }
 
+p{
+    text-align: justify;
+    line-height: 200%;
+}
+
+.logo{
+    font-size: 400%;
+}
+
+.themeSwitch{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.hide{
+    display: none;
+}
+#usersList tr {
+    transition: background-color 0.2s ease;
+}
+
+#usersList tr:hover {
+    background-color: #f1f5f9;
+}
+
+#usersList td {
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+#usersList td:first-child {
+    color: #94a3b8;
+    font-weight: bold;
+}
+
+#usersList .form-check-input {
+    width: 2.5em;
+    height: 1.3em;
+    cursor: pointer;
+}
+.summary-row {
+    --bs-table-bg: #212529;
+    --bs-table-color: white;
+    --bs-table-hover-bg: rgba(var(--bs-emphasis-color-rgb), 0.075);
+    --bs-table-hover-color: #ffffff;
+    border-top: 2px solid var(--bs-border-color);
+    font-size: 1.05rem;
+    text-align: left;
+}
+
+.summary-row td {
+    padding-top: 12px;
+    padding-bottom: 12px;
+} */
+
+
+header{
+    text-align: center;
+    padding: 20px;
+    background-color: var(--bs-secondary-bg);
+}
+
+footer{
+    text-align: center;
+    padding: 10px;
+    font-size: 70%;
+    letter-spacing: 3px;
+    border-top: 1px dotted var(--bs-secondary);
+}
+
+main{
+    padding: 20px;
+}
+
+strong{
+    font-size: 150%;
+}
+
+h1{
+    color: var(--bs-primary);
+}
+
+h2{
+    color: var(--bs-secondary);
+}
+
+p{
+    text-align: justify;
+    line-height: 200%;
+}
+
+.logo{
+    font-size: 400%;
+}
+
+.themeSwitch{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.hide{
+    display: none;
+}
+#usersList tr {
+    transition: background-color 0.2s ease;
+}
+
+#usersList tr:hover {
+    background-color: #f1f5f9;
+}
+
+#usersList td {
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+#usersList td:first-child {
+    color: #94a3b8;
+    font-weight: bold;
+}
+
+#usersList .form-check-input {
+    width: 2.5em;
+    height: 1.3em;
+    cursor: pointer;
+}
+.summary-row {
+    --bs-table-bg: #212529;
+    --bs-table-color: white;
+    --bs-table-hover-bg: rgba(var(--bs-emphasis-color-rgb), 0.075);
+    --bs-table-hover-color: #ffffff;
+    border-top: 2px solid var(--bs-border-color);
+    font-size: 1.05rem;
+    text-align: left;
+}
+
+.summary-row td {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
