@@ -11,8 +11,10 @@
 
 <body>
     <div class="container">
+
+
         <header>
-            <h1>WeatherForecaster<i class="bi bi-person-walking"></i></h1>
+            <h1>StepCounter App <i class="bi bi-person-walking"></i></h1>
             <h3>2026.</h3>
             <div class="themeSwitch">
                 <i class="bi bi-sun-fill" id="lightModeBtn"></i>
@@ -21,55 +23,59 @@
         </header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#" onclick="navigate('views/users/Home')">Navbar</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- guest/base navbar -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- base menu -->
+                    <ul class="navbar-nav" id="baseMenu">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link" href="#" onclick="navigate('views/users/Home')">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Weather Forecaster</a>
+                            <a class="nav-link" href="#" onclick="navigate('views/users/login')">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Login</a>
+                            <a class="nav-link" href="#" onclick="navigate('views/users/register')">Registration</a>
                         </li>
                     </ul>
-
-                    <!-- user navbar -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Daily forecast</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Update profile</a>
-                    </li>
-
-                    <!-- admin navbar -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Add new forecast</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Update forecast</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Forecasts</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Users</a>
-                    </li>
+                    <!-- user menu -->
+                    <ul class="navbar-nav" id="userMenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="navigate('views/users/steps')">My steps</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="navigate('views/users/profile')">My profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
+                    <!-- admin menu -->
+                    <ul class="navbar-nav" id="adminMenu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="navigate('views/admin/dashboard')">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="navigate('views/admin/users')">Manage users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
-        <main></main>
-        <footer></footer>
+
+        <div id="msg"></div>
+
+        <main id="content"></main>
+        <footer>
+            <p class="text-center">Baja SZC Türr István Technikum - 13.a szoftverfejlesztő</p>
+        </footer>
     </div>
 
     <!-- <script src="assets/js/bootstrap.bundle.min.js"></script> -->

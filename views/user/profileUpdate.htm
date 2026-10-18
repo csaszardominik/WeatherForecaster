@@ -1,0 +1,28 @@
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="form-panel">
+            <h2>Profiladataim</h2>
+            <p class="text-secondary">A nevedet és e-mail-címedet itt módosíthatod.</p>
+            <form onclick="updateProfile()">
+                <div class="mb-3"><label class="form-label">Név</label><input class="form-control" id="name" required>
+                </div>
+                <div class="mb-3"><label class="form-label">E-mail-cím</label><input class="form-control" id="email"
+                        type="email" required></div><button class="btn btn-primary">Profil mentése</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-panel">
+            <h2>Jelszó módosítása</h2>
+            <form id="passwordForm" onclick="updatePasswd()">
+                <div class="mb-3"><label class="form-label">Régi jelszó</label><input class="form-control" id="oldpass"
+                        type="password" required></div>
+                <div class="mb-3"><label class="form-label">Új jelszó</label><input class="form-control" id="newpass"
+                        type="password" minlength="6" required></div>
+                <div class="mb-3"><label class="form-label">Új jelszó újra</label><input class="form-control"
+                        id="confirmPass" type="password" minlength="6" required></div><button
+                    class="btn btn-primary">Jelszó módosítása</button>
+            </form>
+        </div>
+    </div>
+</div>
