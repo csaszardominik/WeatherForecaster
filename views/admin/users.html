@@ -1,29 +1,31 @@
-<div class="mb-4"><span class="eyebrow text-secondary">ADMINISZTRÁCIÓ</span>
-    <h2>Felhasználók kezelése</h2>
-    <p class="text-secondary">A regisztrált felhasználók listája és tiltásuk kezelése.</p>
+<div class="mb-4">
+    <span class="text-secondary">ADMINISTRATION</span>
+    <h2>Manage users</h2>
+    <p class="text-secondary">List of registered users and banning them.</p>
 </div>
-<div class="panel">
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Név</th>
-                    <th>E-mail</th>
-                    <th>Szerep</th>
-                    <th>Regisztrált</th>
-                    <th>Utolsó belépés</th>
-                    <th>Belépések</th>
-                    <th class="text-end">Aktív</th>
-                </tr>
-            </thead>
-            <tbody id="usersList">
-                
-                <div id="msg"></div>
-            </tbody>
-            <tfoot>
-                <td colspan="7" class="text-center">Summary: <strong id="usersCount">0</strong> user(s)</td>
-            </tfoot>
-        </table>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>E-mail</th>
+                        <th>Role</th>
+                        <th>Registered</th>
+                        <th>Last login</th>
+                        <th>Logins</th>
+                        <th class="text-end">Active</th>
+                    </tr>
+                </thead>
+                <tbody id="usersList"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8" class="text-center">Summary: <strong id="usersCount">0</strong> user(s)</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </div>

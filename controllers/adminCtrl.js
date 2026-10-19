@@ -1,199 +1,206 @@
-async function getAllUsers() {
+// ---------- USERS ----------
 
+async function getAllUsers() {
     let luid = loadUser() ? loadUser().ID : 0;
 
     const response = await fetch('http://localhost:3000/admin/users', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ luid }),
     });
-    if(response.status !== 200) {
+
+    if (response.status !== 200) {
         const res = await response.json();
         showMessage('danger', 'ERROR', res.error);
     } else {
         const users = await response.json();
-        console.log(users);
         drawTable(users);
     }
 }
-   
+
 function drawTable(users) {
- 
-    let usersCount = document.querySelector('#usersCount');
- 
-    usersCount.innerHTML = users.length;
- 
-    users.forEach((user, index) => {
- 
-        addTableRow(user, index);
- 
-    });
- 
+    document.querySelector('#usersCount').textContent = users.length;
+    document.querySelector('#usersList').innerHTML = '';
+
+    users.forEach((user, index) => addTableRow(user, index));
 }
- 
+
 function addTableRow(user, index) {
- 
     let usersList = document.querySelector('#usersList');
- 
     let tr = document.createElement('tr');
- 
-    let td1 = document.createElement('td');
-    let td2 = document.createElement('td');
-    let td3 = document.createElement('td');
-    let td4 = document.createElement('td');
-    let td5 = document.createElement('td');
-    let td6 = document.createElement('td');
-    let td7 = document.createElement('td');
-    let td8 = document.createElement('td');
-    
 
-    td1.innerHTML = (index + 1) + '.';
-    td2.innerHTML = user.name;
-    td3.innerHTML = user.email;
-    td4.innerHTML = user.role;
-    td5.innerHTML = user.reg;
-    td6.innerHTML = user.last_login ? moment(user.last_login, "YYYYMMDDHmm").fromNow() : 'never';
-    td7.innerHTML = user.last;
-    
- 
-    let isActive = user.is_active ? 'checked' : '';
- 
-    let isdisabled = user.ID == loadUser().ID ? 'disabled' : '';
-    td8.innerHTML = '<div class="form-check form-switch float-end"><input class="form-check-input" type="checkbox" role="switch" id="is_active" ' + isActive + ' ' + isdisabled + ' onclick="changeUserStatus(\'' + user.ID + '\')"></div>';
+    const cells = [
+        (index + 1) + '.',
+        user.name,
+        user.email,
+        user.role,
+        user.reg,
+        user.last ? moment(user.last, 'YYYY-MM-DD HH:mm:ss').fromNow() : 'never',
+        user.loginCount
+    ];
 
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
-    tr.appendChild(td6);
-    tr.appendChild(td7);
-    tr.appendChild(td8);
+    cells.forEach(value => {
+        let td = document.createElement('td');
+        td.textContent = value;
+        tr.appendChild(td);
+    });
+
+    let isActive = user.satus !== 'Banned' ? 'checked' : '';
+    let isDisabled = user.ID == loadUser().ID ? 'disabled' : '';
+
+    let td = document.createElement('td');
+    td.innerHTML = `<div class="form-check form-switch float-end"><input class="form-check-input" type="checkbox" role="switch" ${isActive} ${isDisabled}></div>`;
+    td.querySelector('input').addEventListener('change', () => changeUserStatus(user.ID));
+    tr.appendChild(td);
 
     usersList.appendChild(tr);
-}
-
-async function getStatistics(){
-    let luid = loadUser() ? loadUser().ID : 0;
-
-    const response = await fetch(`http://localhost:3000/admin/weather`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ luid }),
-    });
-
-    if (response.status != 200){
-        const res = await response.json();
-        showMessage('danger', 'ERROR', res.error);
-    } else {
-        const results = await response.json();   
-        drawTableWeather(results);
-    }
-
 }
 
 async function changeUserStatus(uid) {
     let luid = loadUser() ? loadUser().ID : 0;
 
-    const data = {
-        luid,
-        uid
-    };
-
-    const response = await fetch(
-        'http://localhost:3000/admin/status',
-        {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }
-    );
+    const response = await fetch('http://localhost:3000/admin/status', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ luid, uid })
+    });
 
     const res = await response.json();
 
     if (response.status !== 200) {
         showMessage('danger', 'ERROR', res.error);
+        getAllUsers();
     } else {
         showMessage('success', 'SUCCESS', res.message);
     }
 }
 
-// function drawDashboard(results){
-//     let totalSteps = document.querySelector('#totalSteps');
-//     let totalKm = document.querySelector('#totalKm');
-//     let avgSteps = document.querySelector('#avgSteps');
-//     let avgKm = document.querySelector('#avgKm');
-  
-//     totalSteps.innerHTML = results[0][0].totalSteps + ' steps';
-//     totalKm.innerHTML = '~' + Math.round((results[0][0].totalSteps * 0.7) / 1000) + ' km';
-//     avgSteps.innerHTML = results[0][0].averageSteps + ' steps';
-//     avgKm.innerHTML = '~' + Math.round((results[0][0].averageSteps * 0.7) / 1000) + ' km';
+// ---------- FORECASTS ----------
 
-//     let topUsers = document.querySelector('#topUsers');
+let adminForecasts = [];
 
-//     results[1].forEach((user, index) => {
-//         let km = Math.round((user.steps * 0.7) / 1000);
-//         topUsers.innerHTML += `
-//         <tr>
-//             <td>${index+1}.</td>
-//             <td class="text-start">
-//             ${user.name} <br> <small>${user.email}</small>
-//             </td>
-//             <td class="text-end">${user.steps} steps <br> <small>~${km} km</small></td>
-//         </tr>`;
+async function adminWeatherRequest(method, path, data = {}) {
+    const luid = loadUser() ? loadUser().ID : 0;
 
-//     });
-  
-// }
-
-function drawTableWeather(weathers) {
- 
-    let weatherCount = document.querySelector('#weatherCount');
- 
-    weatherCount.innerHTML = weathers.length;
- 
-    weathers.forEach((weather, index) => {
- 
-        addTableRow(weather, index);
- 
+    const response = await fetch(`http://localhost:3000/admin/weather${path}`, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, luid })
     });
- 
+
+    return { ok: response.ok, data: await response.json() };
 }
 
+async function getAdminWeather() {
+    const r = await adminWeatherRequest('POST', '/list');
 
+    if (!r.ok) {
+        showMessage('danger', 'ERROR', r.data.error);
+        return;
+    }
+
+    adminForecasts = r.data;
+    drawTableWeather(adminForecasts);
+}
+
+function drawTableWeather(weathers) {
+    document.querySelector('#weatherCount').textContent = weathers.length;
+    document.querySelector('#weatherRows').innerHTML = '';
+
+    weathers.forEach((weather, index) => addTableRowWeather(weather, index));
+}
 
 function addTableRowWeather(weather, index) {
- 
-    let weatherRows = document.querySelector('#weatherRows');
- 
-    let tr = document.createElement('tr');
- 
-    let td1 = document.createElement('td');
-    let td2 = document.createElement('td');
-    let td3 = document.createElement('td');
-    let td4 = document.createElement('td');
-    let td5 = document.createElement('td');
-    let td6 = document.createElement('td');
+    const tr = document.createElement('tr');
 
-    td1.innerHTML = (index + 1) + '.';
-    td2.innerHTML = weather.date;
-    td3.innerHTML = weather.location;
-    td4.innerHTML = weather.temp_min + ' - '+ weather.temp_max;
-    td5.innerHTML = weather.weather_type;
-    td6.innerHTML = `<button type="button" class="btn btn-danger"> &nbsp;&nbsp;Update profile </button>`
+    const cells = [
+        (index + 1) + '.',
+        weather.date,
+        weather.location,
+        weather.temp_min + ' - ' + weather.temp_max + ' °C',
+        weather.weather_type
+    ];
 
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
-    tr.appendChild(td6);
+    cells.forEach((value, i) => {
+        const td = document.createElement('td');
+        td.textContent = value;
+        if (i === 4) td.className = 'text-capitalize';
+        tr.appendChild(td);
+    });
 
-    weatherRows.appendChild(tr);
+    const actions = document.createElement('td');
+    actions.className = 'text-end text-nowrap';
+    actions.innerHTML = `
+        <button type="button" class="btn btn-sm btn-outline-primary edit"><i class="bi bi-pencil-fill"></i> Edit</button>
+        <button type="button" class="btn btn-sm btn-outline-danger delete"><i class="bi bi-trash-fill"></i> Delete</button>`;
+    actions.querySelector('.edit').addEventListener('click', () => editWeather(weather.ID));
+    actions.querySelector('.delete').addEventListener('click', () => deleteWeather(weather.ID));
+    tr.appendChild(actions);
+
+    document.querySelector('#weatherRows').appendChild(tr);
+}
+
+const WEATHER_FIELDS = ['date', 'location', 'weather_type', 'temp_min', 'temp_max', 'precipitation',
+    'precipitation_probability', 'wind_speed', 'wind_direction', 'humidity', 'pressure', 'uv_index'];
+
+async function saveWeather(event) {
+    event.preventDefault();
+
+    const id = document.querySelector('#weatherId').value;
+    const data = {};
+
+    WEATHER_FIELDS.forEach(field => {
+        data[field] = document.querySelector('#' + field).value;
+    });
+
+    const r = id
+        ? await adminWeatherRequest('PATCH', '/' + id, data)
+        : await adminWeatherRequest('POST', '', data);
+
+    if (!r.ok) {
+        showMessage('danger', 'ERROR', r.data.error);
+        return;
+    }
+
+    showMessage('success', 'SUCCESS', r.data.message);
+    resetWeatherForm();
+    getAdminWeather();
+}
+
+function editWeather(id) {
+    const weather = adminForecasts.find(item => item.ID == id);
+
+    if (!weather) {
+        return;
+    }
+
+    WEATHER_FIELDS.forEach(field => {
+        document.querySelector('#' + field).value = weather[field];
+    });
+
+    document.querySelector('#weatherId').value = weather.ID;
+    document.querySelector('#formTitle').textContent = 'Edit forecast #' + weather.ID;
+    document.querySelector('#weatherForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function deleteWeather(id) {
+    if (!confirm('Are you sure you want to delete this forecast?')) {
+        return;
+    }
+
+    const r = await adminWeatherRequest('DELETE', '/' + id);
+
+    if (!r.ok) {
+        showMessage('danger', 'ERROR', r.data.error);
+        return;
+    }
+
+    showMessage('success', 'SUCCESS', r.data.message);
+    getAdminWeather();
+}
+
+function resetWeatherForm() {
+    document.querySelector('#weatherForm').reset();
+    document.querySelector('#weatherId').value = '';
+    document.querySelector('#formTitle').textContent = 'Add forecast';
 }

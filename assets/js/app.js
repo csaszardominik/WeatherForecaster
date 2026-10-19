@@ -2,72 +2,42 @@ let contentBox = document.querySelector('#content');
 let lightModeBtn = document.querySelector('#lightModeBtn');
 let darkModeBtn = document.querySelector('#darkModeBtn');
 
-let theme = 'light';
-
 async function navigate(page) {
-    console.log('Page:', page);
-
     contentBox.innerHTML = await (await fetch(`${page}.html`)).text();
 
-    switch(page) {
+    switch (page) {
+        case 'views/user/forecast':
+            getWeather();
+            break;
+        case 'views/user/profileUpdate':
+            fillProfileForm();
+            break;
         case 'views/admin/users':
             getAllUsers();
             break;
         case 'views/admin/weather':
-            getStatistics();
-            break;
-        case 'views/user/forecast':
-            
-            break;
-        case 'views/user/profileUpdate':
-            
+            getAdminWeather();
             break;
     }
 }
 
-lightModeBtn.addEventListener('click', () => {
-    setTheme('light');
-});
-
-darkModeBtn.addEventListener('click', () => {
-    setTheme('dark');
-});
+lightModeBtn.addEventListener('click', () => setTheme('light'));
+darkModeBtn.addEventListener('click', () => setTheme('dark'));
 
 function setTheme(theme) {
     document.documentElement.setAttribute('data-bs-theme', theme);
-    saveTheme(theme);
-    setThemeBtnState();
+    localStorage.setItem('WeatherAppTheme', theme);
+
+    // the sun is shown in dark mode (switch to light), the moon in light mode (switch to dark)
+    lightModeBtn.classList.toggle('hide', theme === 'light');
+    darkModeBtn.classList.toggle('hide', theme === 'dark');
 }
 
-function setThemeBtnState() {
-    lightModeBtn.classList.toggle('hide');
-    darkModeBtn.classList.toggle('hide');
+setTheme(localStorage.getItem('WeatherAppTheme') || 'light');
+
+if (loadUser()) {
+    loginCheck();
+} else {
+    setMenuItems('');
+    navigate('views/user/home');
 }
-
-function saveTheme(theme) {
-    localStorage.setItem('SCT', theme);
-}
-
-function loadTheme() {
-    theme = 'light';
-
-    if (localStorage.getItem('SCT')) {
-        theme = localStorage.getItem('SCT');
-
-        if (theme == 'dark') {
-            setThemeBtnState();
-        }
-    }
-
-    setTheme(theme);
-}
-
-function clearUser() {
-     sessionStorage.removeItem('WeatherAppUser') 
-    }
-
-navigate('views/user/home');
-
-loadTheme();
-
-loginCheck();

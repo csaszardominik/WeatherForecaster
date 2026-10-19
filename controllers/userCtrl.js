@@ -190,3 +190,12 @@ async function updatePasswd(){
         confirm.value = '';
     }
 }
+
+function fillProfileForm() {
+    let user = loadUser();
+
+    if (user) {
+        document.querySelector('#name').value = user.name;
+        document.querySelector('#email').value = user.email;
+    }
+}
